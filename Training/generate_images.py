@@ -2,14 +2,26 @@
 Non-Profit Open Software License 3.0 (NPOSL-3.0)
 Copyright (c) 2023 Matteo Lai
 
-@authors: Matteo Lai, Ph.D. student
+@authors: 
+         Matteo Lai, M.Sc, Ph.D. student
          Dept. of Electrical, Electronic and Information Engineering – DEI "Guglielmo Marconi",
          University of Bologna, Bologna, Italy.
          Email address: matteo.lai3@unibo.it
 
-         AI for Medicine Research Group
+         Chiara Marzi, Ph.D., Junior Assistant Professor
+         Department of Statistics, Computer Science, Applications "G. Parenti" (DiSIA)
+         University of Firenze, Firenze, Italy
+         Email address: chiara.marzi@unifi.it
+         
+         Luca Citi, Ph.D., Professor
+         School of Computer Science and Electronic Engineering
+         University of Essex, Colchester, UK
+         Email address: lciti@essex.ac.uk
+         
+         Stefano Diciotti, Ph.D, Associate Professor
          Dept. of Electrical, Electronic and Information Engineering – DEI "Guglielmo Marconi",
          University of Bologna, Bologna, Italy.
+         Email address: stefano.diciotti@unibo.it
 """
 
 import nibabel as nib
