@@ -2,17 +2,11 @@
 
 # PACGAN
 
-This repository contains the implementation of [PACGAN](link/to/our/paper) (Progressive Auxiliary Classifier Generative Adversarial Network), a model inspired by the architecture of the [ACGAN](https://arxiv.org/abs/1610.09585) and by the training procedure of the [Progressive Growing GAN](https://research.nvidia.com/sites/default/files/pubs/2017-10_Progressive-Growing-of/karras2018iclr-paper.pdf), which was designed and implemented by the [AI for Medicine Research Group](https://aiformedresearch.github.io/aiformedresearch/) at the University of Bologna. In this study, we applied this framework for the generation of synthetic full-size brain MRI images of Alzheimer's patients and healthy control and to perform classification between the two classes. 
+This repository contains the implementation of PACGAN (Progressive Auxiliary Classifier Generative Adversarial Network), a model inspired by the architecture of the [ACGAN](https://arxiv.org/abs/1610.09585) and by the training procedure of the [Progressive Growing GAN](https://research.nvidia.com/sites/default/files/pubs/2017-10_Progressive-Growing-of/karras2018iclr-paper.pdf), which was designed and implemented by the [AI for Medicine Research Group](https://aiformedresearch.github.io/aiformedresearch/) at the University of Bologna. In this study, we applied this framework for the generation of synthetic full-size brain MRI images of Alzheimer's patients and healthy control and to perform classification between the two classes. 
 
 <p align="center">
   <img src="Training/PACGAN.JPG" width="1000" title="PACGAN">
 </p>
-
-> **PACGAN: a novel deep learning framework for high-resolution conditional MR image synthesis and classification**<br>
-> Matteo Lai, Chiara Marzi, Luca Citi, and Stefano Diciotti<br>
-> https://link/to/our/paper
->
-> **Abstract:** *Deep learning algorithms trained on medical images often encounter limited data availability, leading to overfitting and unbalanced datasets. Synthetic datasets can address these challenges by providing \textsl{a priori} control over dataset size and balance. In this study, we propose the Progressive Auxiliary Conditional Generative Adversarial Network (PACGAN), a novel framework that utilizes latent space information to perform conditional synthesis of high-resolution medical images and classify new instances. PACGAN was trained on the Alzheimer's Disease Neuroimaging Initiative (ADNI) dataset to generate 2D synthetic brain magnetic resonance (MR) images for Alzheimer's disease patients and healthy controls, while also classifying real data. The generated images exhibited high quality, evaluated qualitatively and quantitatively. The model demonstrated strong classification performance, achieving an area under the receiver operative characteristic curve (AUC) of 0.813 when distinguishing brain MR images of Alzheimer's patients from healthy controls. These findings indicate PACGAN's potential for synthesizing target images and accurately classifying them.*
 
 ## Index
 1. [License](#license)
@@ -66,7 +60,7 @@ To clone the repository, run the following command
 git clone https://github.com/aiformedresearch/PACGAN.git
 ```
 
-### 2.a Installation with Anaconda
+### 2. Installation with Anaconda
 Install [Anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) choosing the appropriate version based on your operating system.
 
 Open the Anaconda Prompt and create the environment that includes all the dependencies needed, saved in the [requirements.txt](requirements.txt) file.
@@ -83,27 +77,6 @@ Navigate to the directory where you cloned the repository
 ```
 cd /path_to/PACGAN
 ```
-
-### 2.b Installation with Docker
-Install [Docker](https://docs.docker.com/get-docker/) selecting the proper operating system.
-
-Once Docker is installed, pull the docker image
-```
-docker pull ai4healthvlab/gans-for-brain-mri-synthesis
-```
-
-Run the docker container
-```
-docker run -it --gpus all -w /home/GANs-for-brain-MRI-synthesis -v /path_to/GANs-for-brain-MRI-synthesis:/home/GANs-for-brain-MRI-synthesis ai4healthvlab/gans-for-brain-mri-synthesis
-
-```
-
-This command will start a new container using the ai4healthvlab/gans-for-brain-mri-synthesis image, with GPU support enabled (`--gpus all`). 
-The `-v` flag is used to mount the directory containing your training data to the `/home/GANs-for-brain-MRI-synthesis` directory inside the container. 
-Replace `/path_to/GANs-for-brain-MRI-synthesis` with the path where you saved the `GANs-for-brain-MRI-synthesis` directory.
-The `-w` flag sets the working directory inside the container to `/home/GANs-for-brain-MRI-synthesis`, where the training code is located.
-
-Once the container is running, you can proceed with the steps outlined in the following sections.
 
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
