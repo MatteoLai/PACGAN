@@ -5,7 +5,7 @@
 This repository contains the implementation of [PACGAN](link/to/our/paper) (Progressive Auxiliary Classifier Generative Adversarial Network), a model inspired by the architecture of the [ACGAN](https://arxiv.org/abs/1610.09585) and by the training procedure of the [Progressive Growing GAN](https://research.nvidia.com/sites/default/files/pubs/2017-10_Progressive-Growing-of/karras2018iclr-paper.pdf), which was designed and implemented by the [AI for Medicine Research Group](https://aiformedresearch.github.io/aiformedresearch/) at the University of Bologna. In this study, we applied this framework for the generation of synthetic full-size brain MRI images of Alzheimer's patients and healthy control and to perform classification between the two classes. 
 
 <p align="center">
-  <img src="PACGAN/PACGAN.JPG" width="1000" title="PACGAN">
+  <img src="Training/PACGAN.JPG" width="1000" title="PACGAN">
 </p>
 
 > **PACGAN: a novel deep learning framework for high-resolution conditional MR image synthesis and classification**<br>
@@ -31,9 +31,9 @@ The PACGAN model has been trained on T1-weighted brain MRI of Alzheimer's patien
 
 Patients and controls were matched for age and sex through the script [ADvsHC_matching.py](Preprocessing/ADvsHC_matching.py).  
 
-Subsequently, the matched subjects were divided into two sets using a stratified holdout approach. This partitioning, implemented in [divide_TrainTest.py](Preprocessing/divide_TrainTest.py), allocated 80% of the images for training and validation, and the remaining 20% for testing. Particular attention was given to ensuring that the age and sex distributions were matched between the sets, while also guaranteeing that images originating from the same subject were placed in separate subsets. The script [main.py](PACGAN/main.py) implements the possibility to futrther divide the isolated 80% of the images into training and validation sets, all the while ensuring that images belonging to the same subject are allocated to different subsets.
+Subsequently, the matched subjects were divided into two sets using a stratified holdout approach. This partitioning, implemented in [divide_TrainTest.py](Preprocessing/divide_TrainTest.py), allocated 80% of the images for training and validation, and the remaining 20% for testing. Particular attention was given to ensuring that the age and sex distributions were matched between the sets, while also guaranteeing that images originating from the same subject were placed in separate subsets. The script [main.py](Training/main.py) implements the possibility to futrther divide the isolated 80% of the images into training and validation sets, all the while ensuring that images belonging to the same subject are allocated to different subsets.
 
-To prepare the data for training, the script [divide_TrainTest.py](divide_TrainTest.py) requires the following inputs:
+To prepare the data for training, the script [divide_TrainTest.py](Preprocessing/divide_TrainTest.py) requires the following inputs:
 - the NIfTI file containing all the slices of the matched subjects (*path_img*);
 - the list of the paths to the volumes from which each image was extracted (*path_list*);
 - the labels corresponding to each subject, downloaded from the [ADNI](https://adni.loni.usc.edu/data-samples/access-data/) site (*path_csv*).
@@ -106,32 +106,32 @@ The `-w` flag sets the working directory inside the container to `/home/GANs-for
 Once the container is running, you can proceed with the steps outlined in the following sections.
 
 ## Training
-To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](PACGAN/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
+To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
 
 After this, you can run the training code:
 ```
-$ python PACGAN/main.py -j PACGAN/config.json
+$ python Training/main.py -j Training/config.json
 ```
 Considering that the training will take a few hours, we suggest launching the process in the background and drawing up the output in an `output.log` file by running:
 ```
-$ python PACGAN/main.py -j PACGAN/config.json > output.log 2>&1 &
+$ python Training/main.py -j Training/config.json > output.log 2>&1 &
 ```
 
 ## Inference
-The trained PACGAN model has dual functionality, serving both image generation and classification purposes. Throughout the training process, the generator and discriminator models, configured to utilize the *DEVICE* set in [config.json](PACGAN/config.json),  are consistently saved on the CPU upon completion. This ensures their compatibility across all devices, including those without CUDA support, facilitating their restoration and utilization.
+The trained PACGAN model has dual functionality, serving both image generation and classification purposes. Throughout the training process, the generator and discriminator models, configured to utilize the *DEVICE* set in [config.json](Training/config.json),  are consistently saved on the CPU upon completion. This ensures their compatibility across all devices, including those without CUDA support, facilitating their restoration and utilization.
 
-The **Generator** can generate synthetic images by calling the function [Generator.py](PACGAN/Generator.py), which loads the weights of the model trained at a specific resolution exploiting the generator model defined in [models.py](PACGAN/models.py). You can set the size and the number of images to generate. Here there is an example of calling it from the command line to generate 100 images for each class (`n_images_xCLASS`=[100,100]) with the size 256 $\times$ 256 (`img_size`=256):
+The **Generator** can generate synthetic images by calling the function [Generator.py](Training/Generator.py), which loads the weights of the model trained at a specific resolution exploiting the generator model defined in [models.py](Training/models.py). You can set the size and the number of images to generate. Here there is an example of calling it from the command line to generate 100 images for each class (`n_images_xCLASS`=[100,100]) with the size 256 $\times$ 256 (`img_size`=256):
 ```
-$ python PACGAN/Generator.py --img_size 256 --n_images_xCLASS 100 100 --model_path /path/to/generator/model.pt --images_path /path/to/saved/images.nii.gz --device cuda --gpus 0 1
+$ python Training/Generator.py --img_size 256 --n_images_xCLASS 100 100 --model_path /path/to/generator/model.pt --images_path /path/to/saved/images.nii.gz --device cuda --gpus 0 1
 ```
 The images generated by the generator saved in `model_path` will be saved in a NIfTI file at `images_path`. The output images are equally divided between the three classes. 
-If, for example, CLASS_SIZE=2 (the same used for the training, indicated in [config.py](PACGAN/config.py)), the first half of the images will belong to class 0, and the second half to class 1. Note that the inputs `--device` and `--gpus` are optional; by default, the model is loaded on the CPU.
+If, for example, CLASS_SIZE=2 (the same used for the training, indicated in [config.py](Training/config.py)), the first half of the images will belong to class 0, and the second half to class 1. Note that the inputs `--device` and `--gpus` are optional; by default, the model is loaded on the CPU.
 
 ------
 
-The **Discriminator** can classify a batch of new images by calling the function [Discriminator.py](PACGAN/Discriminator.py). It can be exploited to do inference on new images organized in a nifti file and will return a csv with the predictions by running from the command line:
+The **Discriminator** can classify a batch of new images by calling the function [Discriminator.py](Training/Discriminator.py). It can be exploited to do inference on new images organized in a nifti file and will return a csv with the predictions by running from the command line:
 ```
-$ python PACGAN/Discriminator.py --img_path /path/to/nifti/images.nii.gz --model_path /path/to/discriminator_model.pt --device cuda --gpus 0 1
+$ python Training/Discriminator.py --img_path /path/to/nifti/images.nii.gz --model_path /path/to/discriminator_model.pt --device cuda --gpus 0 1
 ```
 The prediction will be performed on the NIfTI file saved in `img_path` exploiting the discriminator stored in `model_path`.
 This function will return the predictions in the file *predictions.csv*, saved in `img_path`. Note that the inputs `--device` and `--gpus` are optional; by default, the model is loaded on the CPU.
