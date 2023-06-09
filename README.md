@@ -1,6 +1,4 @@
-[![DOI](https://zenodo.org/badge/651442582.svg)](https://zenodo.org/badge/latestdoi/651442582)
-
-[![Open in Code Ocean](https://codeocean.com/codeocean-assets/badge/open-in-code-ocean.svg)](https://codeocean.com/capsule/4918212/tree)
+[![DOI](https://zenodo.org/badge/651442582.svg)](https://zenodo.org/badge/latestdoi/651442582) [![Open in Code Ocean](https://codeocean.com/codeocean-assets/badge/open-in-code-ocean.svg)](https://codeocean.com/capsule/4918212/tree)
 
 # PACGAN
 
