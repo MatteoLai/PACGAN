@@ -1,3 +1,17 @@
+"""
+Non-Profit Open Software License 3.0 (NPOSL-3.0)
+Copyright (c) 2023 Matteo Lai
+
+@authors: Matteo Lai, Ph.D. student
+         Dept. of Electrical, Electronic and Information Engineering – DEI "Guglielmo Marconi",
+         University of Bologna, Bologna, Italy.
+         Email address: matteo.lai3@unibo.it
+
+         AI for Medicine Research Group
+         Dept. of Electrical, Electronic and Information Engineering – DEI "Guglielmo Marconi",
+         University of Bologna, Bologna, Italy.
+"""
+
 import nibabel as nib
 import torch 
 import torch.nn as nn
