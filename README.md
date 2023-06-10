@@ -154,4 +154,4 @@ After the training of the model, you have the option to re-train it starting fro
 
 ## Citation
 
-If you utilize this package, kindly cite it using the provided DOI ([https://doi.org/10.5281/zenodo.8021009](10.5281/zenodo.8021009)) to find the latest citation on Zenodo. Various citation formats can be found in the **Export** section located at the bottom of the page.
+If you utilize this package, kindly cite it using the provided DOI ([10.5281/zenodo.8021009](https://doi.org/10.5281/zenodo.8021009)) to find the latest citation on Zenodo. Various citation formats can be found in the **Export** section located at the bottom of the page.
