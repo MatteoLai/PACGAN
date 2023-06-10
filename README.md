@@ -21,7 +21,7 @@ This repository contains the implementation of PACGAN (Progressive Auxiliary Cla
 Please read the [LICENSE.md](./LICENSE.md) file before using it.
 
 ## Preprocessing
-The PACGAN model has been trained on T1-weighted brain MRI of Alzheimer's patients and healthy controls, obtained from [ADNI](https://adni.loni.usc.edu/); see [our paper](link_paper) for further details. Each volume was co-registered to the MNI152 standard template space (at 1 mm voxel size), available in the FSL package (version 6.0), through a linear registration with 9 degrees of freedom and trilinear interpolation using FSL's FLIRT. Each output of the co-registration was then made cubic, with a size of 256 $\times$ 256 $\times$ 256. Finally, we extracted the central axial slice (corresponding to slice number 127) and concatenated all the axial slices into a single NIfTI volume with a size of 256 $\times$ 256 $\times$ \#images.
+The PACGAN model has been trained on T1-weighted brain MRI of Alzheimer's patients and healthy controls, obtained from [ADNI](https://adni.loni.usc.edu/). Each volume was co-registered to the MNI152 standard template space (at 1 mm voxel size), available in the FSL package (version 6.0), through a linear registration with 9 degrees of freedom and trilinear interpolation using FSL's FLIRT. Each output of the co-registration was then made cubic, with a size of 256 $\times$ 256 $\times$ 256. Finally, we extracted the central axial slice (corresponding to slice number 127) and concatenated all the axial slices into a single NIfTI volume with a size of 256 $\times$ 256 $\times$ \#images.
 
 Patients and controls were matched for age and sex through the script [ADvsHC_matching.py](Preprocessing/ADvsHC_matching.py).  
 
@@ -110,10 +110,10 @@ The prediction will be performed on the NIfTI file saved in `img_path` exploitin
 This function will return the predictions in the file *predictions.csv*, saved in `img_path`. Note that the inputs `--device` and `--gpus` are optional; by default, the model is loaded on the CPU.
 
 ## Set the configuration file
-The PACGAN model was developed to facilitate training on datasets that may contain various types of images, such as grayscale or RGB, with varying dimensions that may deviate from the default size of 256. To allow for customization of the model's architecture, hyperparameters, and configuration settings, the [config.py](PACGAN/config.py) file can be modified. The following are the key components available for customization within the config.py file.
+The PACGAN model was developed to facilitate training on datasets that may contain various types of images, such as grayscale or RGB, with varying dimensions that may deviate from the default size of 256. To allow for customization of the model's architecture, hyperparameters, and configuration settings, the [config.py](Training/config.py) file can be modified. The following are the key components available for customization within the config.py file.
 
 The **folders** containing the data:
-- *DATA_TRAIN_DIRECTORY* and *LABEL_TRAIN_DIRECTORY* - paths to the data and corresponding labels used for the training and validation sets. The division of the data is performed in the [main.py](PACGAN/main.py) script through a stratified holdout approach. Data are supposed to be organized in a NIfTI file with dimension [W, H, #channels, #images]. The labels are expected to be provided in a csv file with three columns as described above;
+- *DATA_TRAIN_DIRECTORY* and *LABEL_TRAIN_DIRECTORY* - paths to the data and corresponding labels used for the training and validation sets. The division of the data is performed in the [main.py](Training/main.py) script through a stratified holdout approach. Data are supposed to be organized in a NIfTI file with dimension [W, H, #channels, #images]. The labels are expected to be provided in a csv file with three columns as described above;
 - *DATA_TEST_DIRECTORY* and *LABEL_TEST_DIRECTORY* - paths to the data and corresponding labels of the test set. The data should be organized in a NIfTI file with dimension [W, H, #channels, #images]. The labels should be provided in a csv file with three columns as described earlier;
 - *IMAGE_DIRECTORY* and *MODEL_DIRECTORY* - paths to the directories where the outputs of the algorithm will be saved;
 
@@ -154,4 +154,4 @@ After the training of the model, you have the option to re-train it starting fro
 
 ## Citation
 
-If you utilize this package, kindly cite it using the provided DOI (https://doi.org/XXX) to find the latest citation on Zenodo. Various citation formats can be found in the **Export** section located at the bottom of the page.
+If you utilize this package, kindly cite it using the provided DOI ([https://doi.org/10.5281/zenodo.8021009](10.5281/zenodo.8021009)) to find the latest citation on Zenodo. Various citation formats can be found in the **Export** section located at the bottom of the page.
