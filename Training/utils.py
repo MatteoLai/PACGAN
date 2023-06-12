@@ -80,33 +80,43 @@ def seed_worker(worker_id):
     np.random.seed(worker_seed)
     random.seed(worker_seed)
 
-def create_folder(directory):
+def create_folder(
+        directory: str           # path to the folder to create
+        ):
     '''
     Check if the folder in "directory" already exist. If not, create it
-    Args:
-    directory (string): path to the folder to create
     '''
     if not os.path.isdir(directory):
         os.makedirs(directory)
         print('Created folder: ', directory, flush=True)
 
-def no_grad(model):
-    """
-    Args:
-    model (nn.Module): model to freeze
-    """
+def no_grad(
+        model:nn.Module                # model to freeze
+        ):
     for param in model.parameters():
         param.requires_grad = False
     return model
 
-def require_grad(model):
-    """
-    Args:
-    model (nn.Module): model to unfreeze
-    """
+def require_grad(
+        model:nn.Module                # model to unfreeze
+        ):
     for param in model.parameters():
         param.requires_grad = True
     return model
+
+def update(
+        scaler: torch.cuda.amp.GradScaler,         # scaler to save
+        loss: float,                               # loss function
+        opt: torch.optim,                          # optimizer to save
+        device: str                                # device used for training
+        ):
+    if device=='cuda':
+        scaler.scale(loss).backward()
+        scaler.step(opt)
+        scaler.update()
+    else:
+        loss.backward()
+        opt.step()
 
 def save_model(
     model: nn.Module,                               # model to save
@@ -121,12 +131,19 @@ def save_model(
     print("=> Saving model checkpoint", flush=True)
     # Save the model in cpu, to allow to upload it in every device
     model = model.to('cpu')
-    torch.save({
-                'epoch': epoch,
-                'model_state_dict': model.state_dict(),
-                'optimizer_state_dict': optimizer.state_dict(),
-                'scaler_state_dict': scaler.state_dict(),
-                }, os.path.join(model_dir, name_file))
+    if device=='cuda':
+        torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    'scaler_state_dict': scaler.state_dict(),
+                    }, os.path.join(model_dir, name_file))
+    else:
+        torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': model.state_dict(),
+                    'optimizer_state_dict': optimizer.state_dict(),
+                    }, os.path.join(model_dir, name_file)) 
     # Move it back to config.DEVICE to go on with the training process
     model = model.to(device)
     if len(gpus)>1:
@@ -138,15 +155,23 @@ def save_state_dict(
     scaler_state_dict,                              # state dict of the scaler
     epoch: int,                                     # current epoch
     model_dir: str,                                 # directory where the model is saved
-    name_file: str                                  # name of the file where the model is saved
+    name_file: str,                                  # name of the file where the model is saved
+    device: str                                     # device where to save the model
 ):
     print("=> Saving best model (epoch: {})".format(epoch), flush=True)
-    torch.save({
-                'epoch': epoch,
-                'model_state_dict': model_state_dict,
-                'optimizer_state_dict': optimizer_state_dict,
-                'scaler_state_dict': scaler_state_dict,
-                }, os.path.join(model_dir, name_file))
+    if device=='cuda':
+        torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': model_state_dict,
+                    'optimizer_state_dict': optimizer_state_dict,
+                    'scaler_state_dict': scaler_state_dict
+                    }, os.path.join(model_dir, name_file))
+    else:
+        torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': model_state_dict,
+                    'optimizer_state_dict': optimizer_state_dict
+                    }, os.path.join(model_dir, name_file))
 
 def load_model(
     model: nn.Module,                               # model to restore
@@ -167,7 +192,8 @@ def load_model(
     else:
         model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    scaler.load_state_dict(checkpoint['scaler_state_dict'])
+    if device=='cuda':
+        scaler.load_state_dict(checkpoint['scaler_state_dict'])
     epoch = checkpoint['epoch']
     model.to(device)
 
@@ -193,12 +219,14 @@ def restore_model(
     else:
         model = copy.deepcopy(model.to(device))    
     optimizer = type(optimizer)(model.parameters(), lr=lr, betas=(0, 0.99))
-    scaler = torch.cuda.amp.GradScaler()
+    if device=='cuda':
+        scaler = torch.cuda.amp.GradScaler()
 
     # Load state dict
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-    scaler.load_state_dict(checkpoint['scaler_state_dict'])
+    if device=='cuda':
+        scaler.load_state_dict(checkpoint['scaler_state_dict'])
     epoch = checkpoint['epoch']
     model.to(device)
 

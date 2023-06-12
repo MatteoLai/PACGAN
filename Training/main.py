@@ -147,8 +147,12 @@ def main():
     # initialize optimizers and scalers for training
     opt_gen = optim.Adam(gen.parameters(), lr=lr, betas=(0.5, 0.999))
     opt_critic = optim.Adam(critic.parameters(), lr=lr, betas=(0.5, 0.999))
-    scaler_critic = torch.cuda.amp.GradScaler()
-    scaler_gen = torch.cuda.amp.GradScaler()
+    if device=='cuda':
+        scaler_critic = torch.cuda.amp.GradScaler()
+        scaler_gen = torch.cuda.amp.GradScaler()
+    else:
+        scaler_critic = None
+        scaler_gen = None
 
     # Divide the dataset in training e validation
     if validate:

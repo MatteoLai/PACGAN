@@ -38,6 +38,7 @@ from utils import (
     create_folder,
     require_grad,
     no_grad,
+    update,
     save_images,
     save_model,
     save_state_dict,
@@ -107,8 +108,11 @@ def train_fn(
     best_G = copy.deepcopy(G).to('cpu'); best_D = copy.deepcopy(D).to('cpu')
     best_G_sd = best_G.state_dict(); best_D_sd = best_D.state_dict()
     best_optG_sd = opt_gen.state_dict(); best_optD_sd = opt_critic.state_dict()
-    best_scalerG_sd = scaler_gen.state_dict(); best_scalerD_sd = scaler_critic.state_dict()
     model_dir = os.path.join(model_directory,'PACGAN_{}x{}'.format(img_size,img_size)); create_folder(model_dir)
+    if device == 'cuda':
+        best_scalerG_sd = scaler_gen.state_dict(); best_scalerD_sd = scaler_critic.state_dict()
+    else: 
+        best_scalerG_sd = None; best_scalerD_sd = None
 
     if testing and not validate:
         if use_best_model:
@@ -156,9 +160,7 @@ def train_fn(
                 )
 
                 # Update D               
-                scaler_critic.scale(loss_critic).backward()
-                scaler_critic.step(opt_critic)
-                scaler_critic.update()
+                update(scaler_critic, loss_critic, opt_critic, device)
             # -------------------------------------------------------------------------------------------------
 
             # Average of the discriminator loss function and all its terms over the epoch
@@ -184,9 +186,7 @@ def train_fn(
             )   
             
             # Update G
-            scaler_gen.scale(loss_gen).backward()
-            scaler_gen.step(opt_gen)
-            scaler_gen.update()
+            update(scaler_gen, loss_gen, opt_gen, device)
             # --------------------------------------------------------------------------------------------------
 
             # Average of g_loss over the epoch
@@ -247,10 +247,12 @@ def train_fn(
                     best_epoch = epoch
                     best_G_sd.update(G.state_dict())
                     best_optG_sd.update(opt_gen.state_dict())
-                    best_scalerG_sd.update(scaler_gen.state_dict())
+                    if device == 'cuda':
+                        best_scalerG_sd.update(scaler_gen.state_dict())
                     best_D_sd.update(D.state_dict()) 
                     best_optD_sd.update(opt_critic.state_dict())
-                    best_scalerD_sd.update(scaler_critic.state_dict())
+                    if device == 'cuda':
+                        best_scalerD_sd.update(scaler_critic.state_dict())
 
         # ---------- --------------------------------------------------------------------------------------
 
@@ -271,8 +273,8 @@ def train_fn(
 
     # Save best models
     if validate:
-        save_state_dict(best_G_sd, best_optG_sd, best_scalerG_sd, best_epoch, model_dir, 'generator_best.pt')
-        save_state_dict(best_D_sd, best_optD_sd, best_scalerD_sd, best_epoch, model_dir, 'discriminator_best.pt')
+        save_state_dict(best_G_sd, best_optG_sd, best_scalerG_sd, best_epoch, model_dir, 'generator_best.pt', device)
+        save_state_dict(best_D_sd, best_optD_sd, best_scalerD_sd, best_epoch, model_dir, 'discriminator_best.pt', device)
     else:
         save_model(G, opt_gen, scaler_gen, epoch+1, model_dir, 'generator_best.pt', device, gpus)
         save_model(D, opt_critic, scaler_critic, epoch+1, model_dir, 'discriminator_best.pt', device, gpus)
