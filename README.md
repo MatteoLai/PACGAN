@@ -78,6 +78,8 @@ Navigate to the directory where you cloned the repository
 cd /path_to/PACGAN
 ```
 
+Note: To execute the code, [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device or you are unable to install it, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
+
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
 
@@ -136,7 +138,7 @@ The **hyperparameters** of the model:
 - *LAMBDA_CLS2* - the weight of the cross entropy loss between the real labels and the ones estimated by the discriminator for the *real* images (default $\lambda_{cls2}=\lambda_{cls1}/2$).
 
 The **device** to use for the training:
-- *DEVICE* - the device to be used for training (either [CUDA](https://developer.nvidia.com/cuda-downloads) or CPU). By default, if cuda is avalaible, it will be utilized; 
+- *DEVICE* - the device to be used for training (either [CUDA](https://developer.nvidia.com/cuda-downloads) or CPU). By default, if cuda is avalaible, it will be utilized. Please note that using CPU may result in variations in the obtained results compared to using CUDA.
 - *GPUS_N* - the index of GPU to be used for parallelizing the training, if CUDA is available. If you have only one GPU, set GPUS_N=0;
 
 The **training modality**:
