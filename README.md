@@ -63,20 +63,31 @@ git clone https://github.com/aiformedresearch/PACGAN.git
 ### 2. Installation with Anaconda
 Install [Anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) choosing the appropriate version based on your operating system.
 
-Open the Anaconda Prompt and create the environment that includes all the dependencies needed, saved in the [requirements.txt](requirements.txt) file.
+Open the Anaconda Prompt and create the environment:
 ```
-conda create --name PACGAN_env --file requirements.txt
+conda create --name PACGAN_env python=3.8.8
 ```
 
-Activate the environment
+Activate the newly created environment:
 ```
 conda activate PACGAN_env
 ```
 
-Navigate to the directory where you cloned the repository
+Add the conda-forge channel to access additional packages required for this project:
 ```
-cd /path_to/PACGAN
+conda config --env --add channels conda-forge
 ```
+
+Install the necessary packages listed in the [requirements.txt](requirements.txt) file:
+```
+conda install --file requirements.txt
+```
+
+Navigate to the directory where you cloned the repository:
+```
+cd /path_to/PACGAN_repo
+```
+Once you have completed these steps, you can proceed to execute the code.
 
 Note: To execute the code, [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device or you are unable to install it, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
 
