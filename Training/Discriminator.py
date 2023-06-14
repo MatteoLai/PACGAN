@@ -52,7 +52,7 @@ parser.add_argument('-j', '--jsonfile',
                 dest='JSONfilename',
                 help='JSON configuration file',
                 metavar='FILE',
-                default='PACGAN/config.json')
+                default='Training/config.json')
 args = parser.parse_args()
 
 class Discriminate():
