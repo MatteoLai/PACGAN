@@ -121,7 +121,7 @@ The `-v` flag is used to mount the directory containing your training data to th
 Replace `/path_to/PACGAN_repo` with the path where you saved the `PACGAN` directory.
 The `-w` flag sets the working directory inside the container to `/home/pacgan`, where the training code is located.
 
-Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section.
+Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section. Type `exit` when you want to exit from the container.
 
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
