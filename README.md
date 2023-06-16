@@ -76,7 +76,7 @@ Activate the newly created environment:
 conda activate PACGAN_env
 ```
 
-Add the `conda-forge` channel to access additional packages required for this project:
+Add the [conda-forge](https://conda-forge.org/) channel to access additional packages required for this project:
 ```
 conda config --env --add channels conda-forge
 ```
