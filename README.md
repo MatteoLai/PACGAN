@@ -116,7 +116,7 @@ Run the docker container
 docker run -it --gpus all -w /home/pacgan -v /path_to/PACGAN_repo:/home/pacgan aiformedresearch/pacgan
 ```
 
-This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus 0`. 
+This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus device=0`. 
 The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
 Replace `/path_to/PACGAN_repo` with the path where you saved the `PACGAN` directory.
 The `-w` flag sets the working directory inside the container to `/home/pacgan`, where the training code is located.
