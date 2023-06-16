@@ -59,11 +59,14 @@ To clone the repository, run the following command
 ```
 git clone https://github.com/aiformedresearch/PACGAN.git
 ```
+To execute the code, you have two options: either proceed with the installation of the requirements using Anaconda (follow the steps in section 2.a), or use the Docker container (follow the steps in section 2.b).
 
-### 2. Installation with Anaconda
+Before to proceeding, please note that [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
+
+### 2.a Installation with Anaconda
 Install [Anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) choosing the appropriate version based on your operating system.
 
-Open the Anaconda Prompt and create the environment:
+Open the Anaconda Prompt and create the environment with Python version 3.8.8:
 ```
 conda create --name PACGAN_env python=3.8.8
 ```
@@ -73,23 +76,52 @@ Activate the newly created environment:
 conda activate PACGAN_env
 ```
 
-Add the conda-forge channel to access additional packages required for this project:
+Add the `conda-forge` channel to access additional packages required for this project:
 ```
 conda config --env --add channels conda-forge
 ```
 
-Install the necessary packages listed in the [requirements.txt](requirements.txt) file:
+To expedite the installation process, we recommend installing the required packages in the following order:
+
+i) Install the [Pytorch](https://pytorch.org/) packages:
+```
+conda install pytorch==1.9.0 torchvision==0.10.0 torchmetrics==0.11.0 -c pytorch -c nvidia
+```
+
+ii) install the [torch-fidelity](https://pypi.org/project/torch-fidelity/) package separately:
+```
+conda install torch-fidelity==0.3.0
+```
+
+iii) install the remaining necessary packages listed in the [requirements.txt](requirements.txt) file:
 ```
 conda install --file requirements.txt
 ```
 
-Navigate to the directory where you cloned the repository:
+Once you have completed these steps, you can proceed to the [Training](#training) or [Inference](#inference) section, after navigating to the directory where you cloned the repository:
 ```
 cd /path_to/PACGAN_repo
 ```
-Once you have completed these steps, you can proceed to execute the code.
 
-Note: To execute the code, [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device or you are unable to install it, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
+### 2.b Installation with Docker
+Install [Docker](https://docs.docker.com/get-docker/) selecting the proper operating system.
+
+Once Docker is installed, pull the docker image
+```
+docker pull aiformedresearch/pacgan
+```
+
+Run the docker container
+```
+docker run -it --gpus all -w /home/pacgan -v /path_to/PACGAN_repo:/home/pacgan aiformedresearch/pacgan
+```
+
+This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus 0`. 
+The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
+Replace `/path_to/PACGAN_repo` with the path where you saved the `PACGAN` directory.
+The `-w` flag sets the working directory inside the container to `/home/pacgan`, where the training code is located.
+
+Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section.
 
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
