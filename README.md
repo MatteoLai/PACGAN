@@ -111,7 +111,7 @@ Once Docker is installed, pull the docker image
 docker pull aiformedresearch/pacgan
 ```
 
-Run the docker container
+Run the Docker container
 ```
 docker run -it --gpus all -w /home/pacgan -v /path_to/PACGAN_repo:/home/pacgan aiformedresearch/pacgan
 ```
@@ -123,7 +123,7 @@ The `-w` flag sets the working directory inside the container to `/home/pacgan`,
 The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
 Make sure to replace `/path_to/PACGAN_repo` with the directory path where you have saved the `PACGAN` directory along with the required training data.
 
-Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section. Type `exit` when you want to exit from the container.
+Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section. Type `exit` when you want to exit from the Docker container.
 
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
