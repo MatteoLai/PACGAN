@@ -118,11 +118,10 @@ docker run -it --gpus all -w /home/pacgan -v /path_to/PACGAN_repo:/home/pacgan a
 
 This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus device=0`. If CUDA is not available in your device, remove the `--gpus` flag to train on CPU.
 
-The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
-
-Make sure to replace `/path_to/PACGAN_repo` with the directory path where you have saved the `PACGAN` directory along with the required training data.
-
 The `-w` flag sets the working directory inside the container to `/home/pacgan`, where the training code is located.
+
+The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
+Make sure to replace `/path_to/PACGAN_repo` with the directory path where you have saved the `PACGAN` directory along with the required training data.
 
 Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section. Type `exit` when you want to exit from the container.
 
@@ -131,11 +130,11 @@ To train the model on new data, you can change the path to the data and the hype
 
 After this, you can run the training code:
 ```
-$ python Training/main.py -j Training/config.json
+python Training/main.py -j Training/config.json
 ```
 Considering that the training will take a few hours, we suggest launching the process in the background and drawing up the output in an `output.log` file by running:
 ```
-$ python Training/main.py -j Training/config.json > output.log 2>&1 &
+python Training/main.py -j Training/config.json > output.log 2>&1 &
 ```
 
 ## Inference
