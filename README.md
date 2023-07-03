@@ -59,6 +59,12 @@ To clone the repository, run the following command
 ```
 git clone https://github.com/aiformedresearch/PACGAN.git
 ```
+
+Finally, navigate inside the `PACGAN` repository you just cloned:
+```
+cd PACGAN
+```
+
 To execute the code, you have two options: either proceed with the installation of the requirements using Anaconda (follow the steps in section 2.a), or use the Docker container (follow the steps in section 2.b).
 
 Before to proceeding, please note that [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
@@ -98,10 +104,7 @@ iii) install the remaining necessary packages listed in the [requirements.txt](r
 conda install --file requirements.txt
 ```
 
-Once you have completed these steps, you can proceed to the [Training](#training) or [Inference](#inference) section, after navigating to the directory where you cloned the repository:
-```
-cd /path_to/PACGAN_repo
-```
+Once you have completed these steps, you can proceed to the [Training](#training) or [Inference](#inference) section.
 
 ### 2.b Installation with Docker
 Install [Docker](https://docs.docker.com/get-docker/) selecting the proper operating system.
