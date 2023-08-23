@@ -39,19 +39,17 @@ from utils import seed_everything
 seed_everything(0)
 
 class Quantitative_metrics():
-    def __init__(self, real_path, fake_path, real_y_path, fake_y_path, img_channels, class_size, output_txt, device, batch_size):
-        """
-        Args:
-        real_path (str): path to the real images
-        fake_path (str): path to the fake images
-        real_y_path (str): path to the labels of the real images
-        fake_y_path (str): path to the labels of the fake images
-        img_channels (int): number of channels of the images (1 for grayscale, 3 for RGB)
-        class_size (int): number of classes
-        output_txt (str): name of the text file where to save the metrics values (e.g. metrics.txt)
-        device (str): 'cpu' or 'cuda'
-        batch_size (int): dimension of the batch size for KID computation
-        """
+    def __init__(self,
+        real_path: str,                 # Path to the real images
+        fake_path: str,                 # Path to the fake images
+        real_y_path: str,               # Path to the labels of the real images
+        fake_y_path: str,               # Path to the labels of the fake images
+        img_channels: int,              # Number of channels of the images (1 for grayscale, 3 for RGB)
+        class_size: int,                # Number of classes
+        output_txt: str,                # Name of the text file where to save the metrics values (e.g. metrics.txt)
+        device: str,                    # 'cpu' or 'cuda'
+        batch_size: int                 # Dimension of the batch size for KID computation
+    ):
 
         self.real_path = real_path
         self.fake_path = fake_path
@@ -63,16 +61,11 @@ class Quantitative_metrics():
         self.device = device
         self.bs = batch_size
 
-    def load_images(self, path, convert_to_RGB=False):
-        """ Loads all .png or .jpg images from a given path
-        Warnings: Expects all images to be of same dtype and shape.
-        Args:
-            path: relative path to directory
-            device: 'cpu' or 'cuda'
-            convert_to_RGB: if the image is grayscale, set convert_to_RGB=True to compute the FID.
-        Returns:
-            final_images: np.array of image dtype and shape.
-        """
+    def load_images(self,
+        path: str,                      # Relative path to directory
+        convert_to_RGB: bool = False    # If the image is grayscale, set convert_to_RGB=True to compute the FID.
+    ):
+
         img = nib.load(path) # numpy array of shape (W,H,C,N)
         img = np.asanyarray(img.dataobj)
         img = np.swapaxes(img, 0,3)               # (N,H,C,W)
@@ -83,14 +76,18 @@ class Quantitative_metrics():
             img = img.repeat(1,1,1,3)
         return img
     
-    def rescale01(self, img):
+    def rescale01(self, 
+            img: torch.tensor  # Tensor to be rescaled in [0,1]
+        ):
         if img.max() > 1:
             img = img/255 # Rescale from [0,255] to [0,1]
         elif img.min() < 0:
             img = (img+1)/2 # Rescale from [-1,1] to [0,1]
         return img
 
-    def preprocessing_FID(self, path):
+    def preprocessing_FID(self, 
+                path: str,        # Relative path to the NIfTI file to be preprocessed for FID calculation
+        ):
         '''Preprocessing needed for the Inception V3 net, as suggested in 
             https://pytorch.org/hub/pytorch_vision_inception_v3/'''
         imgs_dist = self.load_images(path, convert_to_RGB=True)
@@ -103,7 +100,10 @@ class Quantitative_metrics():
         imgs_dist = preprocess(imgs_dist)
         return imgs_dist
 
-    def FID(self, path1, path2):
+    def FID(self, 
+            path1: str,      # Relative path to the first NIfTI file to be compared (e.g., of Real images)
+            path2: str       # Relative path to the second NIfTI file to be compared (e.g., of Fake images)
+        ):
         imgs_dist1 = self.preprocessing_FID(path1)
         imgs_dist2 = self.preprocessing_FID(path2)
         fid = FrechetInceptionDistance(feature=2048, normalize=True, reset_real_features=True)
@@ -112,7 +112,13 @@ class Quantitative_metrics():
         fid_score = fid.compute()
         return fid_score.item()
 
-    def KID(self, path1, path1y, path2, path2y, batch_size):
+    def KID(self, 
+            path1: str,        # Relative path to the first NIfTI file to be compared (e.g., of Real images) 
+            path1y: str,       # Relative path to the first csv file that contains the labels of the images to be compared (e.g., of Real images)
+            path2: str,        # Relative path to the second NIfTI file to be compared (e.g., of Fake images)
+            path2y: str,       # Relative path to the second csv file that contains the labels of the images to be compared (e.g., of Fake images)
+            batch_size: int    # Dimension of the batch size for KID computation
+            ):
         imgs_dist1 = self.preprocessing_FID(path1)
         imgs_dist2 = self.preprocessing_FID(path2)
 
@@ -139,7 +145,12 @@ class Quantitative_metrics():
             kid_classes_std.append(kid_std_c.item())
         return kid_mean.item(), kid_std.item(), kid_classes_m, kid_classes_std
 
-    def SSIM(self, path1, path1y, path2, path2y):
+    def SSIM(self,
+            path1: str,        # Relative path to the first NIfTI file to be compared (e.g., of Real images) 
+            path1y: str,       # Relative path to the first csv file that contains the labels of the images to be compared (e.g., of Real images)
+            path2: str,        # Relative path to the second NIfTI file to be compared (e.g., of Fake images)
+            path2y: str,       # Relative path to the second csv file that contains the labels of the images to be compared (e.g., of Fake images)
+        ):
         # Choose 1000 random couples of real and fake images belonging to the same class 
         imgs_real = self.load_images(path1)
         imgs_fake = self.load_images(path2)
