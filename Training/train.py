@@ -276,8 +276,8 @@ def train_fn(
         save_state_dict(best_G_sd, best_optG_sd, best_scalerG_sd, best_epoch, model_dir, 'generator_best.pt', device)
         save_state_dict(best_D_sd, best_optD_sd, best_scalerD_sd, best_epoch, model_dir, 'discriminator_best.pt', device)
     else:
-        save_model(G, opt_gen, scaler_gen, epoch+1, model_dir, 'generator_best.pt', device, gpus)
-        save_model(D, opt_critic, scaler_critic, epoch+1, model_dir, 'discriminator_best.pt', device, gpus)
+        save_model(G, opt_gen, scaler_gen, epoch, model_dir, 'generator_best.pt', device, gpus)
+        save_model(D, opt_critic, scaler_critic, epoch, model_dir, 'discriminator_best.pt', device, gpus)
 
     # Plot losses during training 
     plot_loss(dis_loss_list, gen_loss_list, best_epoch, image_dir)
