@@ -38,18 +38,18 @@ and will return the **data ready for training the PACGAN model**:
   Below is an example of the folder hierarchy, which can be customized using the [config.json](Training/config.json) file (refer to the [Set the configuration file](#set-the-configuration-file) section):
   ```
   data/ADNI
-    └─── ADNI_train
-    |        └─── Real256x256.nii.gz
-    |        └─── Real128x128.nii.gz
-    |        └───   ...
-    |        └─── Real4x4.nii.gz
-    |        └─── labels.csv
-    └─── ADNI_test
-             └─── Real256x256.nii.gz
-             └─── Real128x128.nii.gz
-             └───   ...
-             └─── Real4x4.nii.gz
-             └─── labels.csv
+        └─── ADNI_train
+        |        └─── Real256x256.nii.gz
+        |        └─── Real128x128.nii.gz
+        |        └───   ...
+        |        └─── Real4x4.nii.gz
+        |        └─── labels.csv
+        └─── ADNI_test
+                 └─── Real256x256.nii.gz
+                 └─── Real128x128.nii.gz
+                 └───   ...
+                 └─── Real4x4.nii.gz
+                 └─── labels.csv
   ```
 
 - two csv files (one for training and one for testing) with three columns: 
@@ -57,14 +57,14 @@ and will return the **data ready for training the PACGAN model**:
   - '*Label*', the label of the image (0 for CN, 1 for AD);
   - '*Subject_ID*', the ID of the subjects. This information is crucial during the division into training and validation sets to ensure that images from the same subject are kept separate, thus preventing any data leakage issues.
  
-    | ID | Label | Subject_ID |
-    |----|-------|------------|
-    | 0  |   0   |   S_0001   |
-    | 1  |   0   |   S_0002   |
-    | 2  |   1   |   S_0003   |
-    | 3  |   1   |   S_0003   |
-    |... |  ...  |    ...     |
-    |#images |  0  |  S_000N   |
+  | ID | Label | Subject_ID |
+  |----|-------|------------|
+  | 0  |   0   |   S_0001   |
+  | 1  |   0   |   S_0002   |
+  | 2  |   1   |   S_0003   |
+  | 3  |   1   |   S_0003   |
+  |... |  ...  |    ...     |
+  |#images |  0  |  S_000N   |
 
 ## Installation
 ### 1. Clone the repository 
