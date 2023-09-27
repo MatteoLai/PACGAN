@@ -37,7 +37,7 @@ and will return the **data ready for training the PACGAN model**:
 
   Below is an example of the folder hierarchy, which can be customized using the [config.json](Training/config.json) file (refer to the [Set the configuration file](#set-the-configuration-file) section):
   ```
-  data
+  data/ADNI
     └─── ADNI_train
     |        └─── Real256x256.nii.gz
     |        └─── Real128x128.nii.gz
