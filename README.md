@@ -43,11 +43,13 @@ and will return the **data ready for training the PACGAN model**:
     |        └─── Real128x128.nii.gz
     |        └───   ...
     |        └─── Real4x4.nii.gz
+    |        └─── labels.csv
     └─── ADNI_test
              └─── Real256x256.nii.gz
              └─── Real128x128.nii.gz
              └───   ...
              └─── Real4x4.nii.gz
+             └─── labels.csv
   ```
 
 - two csv files (one for training and one for testing) with three columns: 
