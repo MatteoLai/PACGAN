@@ -19,3 +19,24 @@ RUN conda install torch-fidelity==0.3.0
 RUN apt-get update
 SHELL ["conda", "run", "-n", "base", "/bin/bash", "-c"]
 
+# Initialize the directories
+RUN mkdir /PACGAN
+RUN mkdir /PACGAN/Preprocessing
+RUN mkdir /PACGAN/Training
+
+# Copy the files
+COPY ./Training/config.json /PACGAN/Training/config.json
+COPY ./Training/assessment.py /PACGAN/Training/assessment.py
+COPY ./Training/Discriminator.py /PACGAN/Training/Discriminator.py
+COPY ./Training/generate_images.py /PACGAN/Training/generate_images.py
+COPY ./Training/Generator.py /PACGAN/Training/Generator.py
+COPY ./Training/Load_dataset.py /PACGAN/Training/Load_dataset.py
+COPY ./Training/main.py /PACGAN/Training/main.py
+COPY ./Training/model.py /PACGAN/Training/model.py
+COPY ./Training/train.py /PACGAN/Training/train.py
+COPY ./Training/utils.py /PACGAN/Training/utils.py
+COPY ./Preprocessing/ADvsHC_matching.py /PACGAN/Preprocessing/ADvsHC_matching.py
+COPY ./Preprocessing/divide_TrainTest.py /PACGAN/Preprocessing/divide_TrainTest.py
+
+# Set the working directory
+WORKDIR /PACGAN
