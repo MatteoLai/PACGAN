@@ -34,19 +34,37 @@ To prepare the data for training, the script [divide_TrainTest.py](Preprocessing
 
 and will return the **data ready for training the PACGAN model**:
 - two NIfTI files for each resolution needed for the training of PACGAN (256 $\times$ 256, 128 $\times$ 128, 64 $\times$ 64, 32 $\times$ 32, 16 $\times$ 16, 8 $\times$ 8 and 4 $\times$ 4), one for the training and one for the test (saved in two separated folders);
+
+  Below is an example of the folder hierarchy, which can be customized using the [config.json](Training/config.json) file (refer to the [Set the configuration file](#set-the-configuration-file) section):
+  ```
+  data/ADNI
+        └─── ADNI_train
+        |        └─── Real256x256.nii.gz
+        |        └─── Real128x128.nii.gz
+        |        └───   ...
+        |        └─── Real4x4.nii.gz
+        |        └─── labels.csv
+        └─── ADNI_test
+                 └─── Real256x256.nii.gz
+                 └─── Real128x128.nii.gz
+                 └───   ...
+                 └─── Real4x4.nii.gz
+                 └─── labels.csv
+  ```
+
 - two csv files (one for training and one for testing) with three columns: 
   - '*ID*', the index of the image in the corresponding NIfTI file (0,1, ..., #images); 
   - '*Label*', the label of the image (0 for CN, 1 for AD);
   - '*Subject_ID*', the ID of the subjects. This information is crucial during the division into training and validation sets to ensure that images from the same subject are kept separate, thus preventing any data leakage issues.
  
-| ID | Label | Subject_ID |
-|----|-------|------------|
-| 0  |   0   |   S_0001   |
-| 1  |   0   |   S_0002   |
-| 2  |   1   |   S_0003   |
-| 3  |   1   |   S_0003   |
-|... |  ...  |    ...     |
-|#images |  0  |  S_000N   |
+  | ID | Label | Subject_ID |
+  |----|-------|------------|
+  | 0  |   0   |   S_0001   |
+  | 1  |   0   |   S_0002   |
+  | 2  |   1   |   S_0003   |
+  | 3  |   1   |   S_0003   |
+  |... |  ...  |    ...     |
+  |#images |  0  |  S_000N   |
 
 ## Installation
 ### 1. Clone the repository 
@@ -176,7 +194,7 @@ The prediction will be performed on the NIfTI file saved in `img_path` exploitin
 This function will return the predictions in the file *predictions.csv*, saved in `img_path`. Note that the inputs `--device` and `--gpus` are optional; by default, the model is loaded on the CPU.
 
 ## Set the configuration file
-The PACGAN model was developed to facilitate training on datasets that may contain various types of images, such as grayscale or RGB, with varying dimensions that may deviate from the default size of 256. To allow for customization of the model's architecture, hyperparameters, and configuration settings, the [config.py](Training/config.py) file can be modified. The following are the key components available for customization within the config.py file.
+The PACGAN model was developed to facilitate training on datasets that may contain various types of images, such as grayscale or RGB, with varying dimensions that may deviate from the default size of 256. To allow for customization of the model's architecture, hyperparameters, and configuration settings, the [config.json](Training/config.json) file can be modified. The following are the key components available for customization within the config.py file.
 
 The **folders** containing the data:
 - *DATA_TRAIN_DIRECTORY* and *LABEL_TRAIN_DIRECTORY* - paths to the data and corresponding labels used for the training and validation sets. The division of the data is performed in the [main.py](Training/main.py) script through a stratified holdout approach. Data are supposed to be organized in a NIfTI file with dimension [W, H, #channels, #images]. The labels are expected to be provided in a csv file with three columns as described above;
