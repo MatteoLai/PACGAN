@@ -67,7 +67,10 @@ and will return the **data ready for training the PACGAN model**:
   |#images |  0  |  S_000N   |
 
 ## Installation
-### 1. Clone the repository 
+
+### Installation with Anaconda
+#### 1. Clone the repository
+   
 Open the terminal or command prompt on your local machine and navigate to the directory where you want to clone the repository
 ```
 cd /path_to/PACGAN_repo
@@ -83,11 +86,9 @@ Finally, navigate inside the `PACGAN` repository you just cloned:
 cd PACGAN
 ```
 
-To execute the code, you have two options: either proceed with the installation of the requirements using Anaconda (follow the steps in section 2.a), or use the Docker container (follow the steps in section 2.b).
-
 Before to proceeding, please note that [CUDA installation](https://developer.nvidia.com/cuda-downloads) is required. If CUDA is not compatible with your device, you can still run the code on CPU. However, please note that the results may vary compared to running on CUDA-enabled devices.
 
-### 2.a Installation with Anaconda
+#### 2. Create the conda environment
 Install [Anaconda](https://docs.anaconda.com/free/anaconda/install/index.html) choosing the appropriate version based on your operating system.
 
 Open the Anaconda Prompt and create the environment with Python version 3.8.8:
@@ -124,7 +125,7 @@ conda install --file requirements.txt
 
 Once you have completed these steps, you can proceed to the [Training](#training) or [Inference](#inference) section.
 
-### 2.b Installation with Docker
+### Installation with Docker
 Install [Docker](https://docs.docker.com/get-docker/) selecting the proper operating system.
 
 Once Docker is installed, pull the docker image
@@ -134,17 +135,15 @@ docker pull aiformedresearch/pacgan
 
 Run the Docker container
 ```
-docker run -it --gpus all -w /home/pacgan -v /path_to/PACGAN_repo:/home/pacgan aiformedresearch/pacgan
+docker run -it -v /absolute_path/to/data_folder:/PACGAN/data --gpus all aiformedresearch/pacgan
 ```
+This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus 0`. If CUDA is not available in your device, remove the `--gpus` flag to train on CPU.
 
-This command will start a new container using the [aiformedresearch/pacgan](https://hub.docker.com/r/aiformedresearch/pacgan) image, with GPU support enabled (`--gpus all`). Please note that you can also select a specific GPU to use, e.g., `--gpus device=0`. If CUDA is not available in your device, remove the `--gpus` flag to train on CPU.
+The `-v` flag is used to mount the directory containing your training data to the `/PACGAN/data` directory inside the container. 
+Make sure to replace `/absolute_path/to/data_folder` with the absolute path to the directory containing data to be used for the training of PACGAN. 
+Please note that the *data* folder must be organised as explained in the [Preprocessing](#preprocessing) section.
 
-The `-w` flag sets the working directory inside the container to `/home/pacgan`, where the training code is located.
-
-The `-v` flag is used to mount the directory containing your training data to the `/home/pacgan` directory inside the container. 
-Make sure to replace `/path_to/PACGAN_repo` with the directory path where you have saved the `PACGAN` directory along with the required training data.
-
-Once the container is running, you can proceed with the steps outlined in the [Training](#training) or [Inference](#inference) section. Type `exit` when you want to exit from the Docker container.
+Once the container is running, you can proceed with the steps outlined in the [Training](#training) section. Type `exit` when you want to exit from the Docker container.
 
 ## Training
 To train the model on new data, you can change the path to the data and the hyperparameters of the model by modifying the [config.json](Training/config.json) file, as detailed in the [Set the configuration file](#set-the-configuration-file) section.
